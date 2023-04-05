@@ -1,6 +1,6 @@
-create database assessment3;
+create database bgg;
 
-use assessment3;
+use bgg;
 
 create table user (
 	user_id 	varchar(8) not null,
@@ -14,5 +14,8 @@ create table task (
     description 	varchar(255),
     priority 		int not null,
     due_date		date,
-    constraint task_id_pk primary key (task_id)
+    user_id			varchar(8) not null,
+    constraint task_id_pk primary key (task_id),
+    constraint task_id_fk foreign key (user_id) references user (user_id)
 );
+

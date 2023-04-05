@@ -9,6 +9,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import ibf2022.paf.assessment.server.models.User;
+import ibf2022.paf.assessment.server.services.InsertException;
 
 // TODO: Task 3
 
@@ -33,12 +34,12 @@ public class UserRepository {
         return Optional.of(user);
     }
 
-    public String insertUser(User user) {
+    public String insertUser(User user) throws InsertException{
         String userId = UUID.randomUUID().toString().substring(0, 8);
         int inserted = jdbcTemplate.update(SQL_INSERTUSER,userId,user.getUsername(),user.getName());
-        if (inserted >0){
-            return userId;
+        if (inserted < 1){
+            throw new InsertException("Failed to insert user %s".formatted(user.getUsername()));
         }
-        return "User insert failed!";
+        return userId;
     }
 }

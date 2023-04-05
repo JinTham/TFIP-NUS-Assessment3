@@ -22,18 +22,17 @@ public class TodoService {
     @Autowired
     private UserRepository userRepo;
 
-    @Transactional
-    public Boolean upsertTask(List<Task> taskList, String username) {
+    @Transactional(rollbackFor = InsertException.class)
+    public void upsertTask(List<Task> taskList, String username) throws InsertException{
         if (userRepo.findUserByUsername(username).isEmpty()) {
             User user = new User();
             user.setUsername(username);
             user.setName(username.substring(0,1).toUpperCase() + username.substring(1));
             userRepo.insertUser(user);
         }
-        Boolean insertTaskSuccess = false;
+        
         for (Task task : taskList) {
-            insertTaskSuccess = taskRepo.insertTask(task);
+            taskRepo.insertTask(task);
         }
-        return insertTaskSuccess;
     }
 }
