@@ -14,7 +14,10 @@ public class TaskRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public void insertTask(Task task) {
-        
+    private static final String SQL_INSERTTASK = "insert into task (description, priority, due_date) values (?,?,?)";
+
+    public Boolean insertTask(Task task) {
+        int inserted = jdbcTemplate.update(SQL_INSERTTASK,task.getDescription(),task.getPriority(),task.getDueDate());
+        return inserted>0;
     }
 }

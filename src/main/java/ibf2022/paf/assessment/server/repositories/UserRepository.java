@@ -18,11 +18,11 @@ public class UserRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private static final String SQL_findUserByUsername = "select * from user where username = ?";
-    private static final String SQL_insertUser = "insert into user (user_id, username, name) values (?,?,?);";
+    private static final String SQL_FINDUSERBYUSERNAME = "select * from user where username = ?";
+    private static final String SQL_INSERTUSER = "insert into user (user_id, username, name) values (?,?,?)";
 
     public Optional<User> findUserByUsername(String username) {
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_findUserByUsername,username);
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_FINDUSERBYUSERNAME,username);
         if (!rs.next()){
             return Optional.empty();
         }
@@ -35,7 +35,7 @@ public class UserRepository {
 
     public String insertUser(User user) {
         String userId = UUID.randomUUID().toString().substring(0, 8);
-        int inserted = jdbcTemplate.update(SQL_insertUser,user.getUserId(),user.getUsername(),user.getName());
+        int inserted = jdbcTemplate.update(SQL_INSERTUSER,userId,user.getUsername(),user.getName());
         if (inserted >0){
             return userId;
         }
