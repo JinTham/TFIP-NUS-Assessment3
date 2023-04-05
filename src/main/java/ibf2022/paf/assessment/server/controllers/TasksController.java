@@ -29,11 +29,6 @@ public class TasksController {
     @Autowired
     private TodoService todoSvc;
 
-    // @GetMapping(path={"/","/index"})
-    // public String getLandingPage() {
-    //     return "index.html";
-    // }
-
     @PostMapping(path="/task")
     public ModelAndView postTodoList(@RequestParam MultiValueMap<String,String> form, Model model)  {
         ModelAndView view = new ModelAndView();
