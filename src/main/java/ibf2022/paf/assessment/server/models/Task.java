@@ -10,6 +10,7 @@ public class Task {
     private String description;
     private Integer priority;
     private Date dueDate;
+    private String userId;
     
     public Task() {
     }
@@ -44,6 +45,14 @@ public class Task {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

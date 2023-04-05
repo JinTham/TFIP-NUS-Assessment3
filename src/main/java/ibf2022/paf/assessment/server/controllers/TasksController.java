@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ibf2022.paf.assessment.server.models.Task;
@@ -28,25 +29,36 @@ public class TasksController {
     @Autowired
     private TodoService todoSvc;
 
-    @GetMapping(path={"/","/index"})
-    public String getLandingPage() {
-        return "index";
-    }
+    // @GetMapping(path={"/","/index"})
+    // public String getLandingPage() {
+    //     return "index.html";
+    // }
 
     @PostMapping(path="/task")
-    public ModelAndView postTodoList(@RequestBody MultiValueMap<String,String> form, Model model)  {
+    public ModelAndView postTodoList(@RequestParam MultiValueMap<String,String> form, Model model)  {
+        ModelAndView view = new ModelAndView();
         String username = form.getFirst("username");
         List<Task> taskList = new LinkedList<>();
-        int taskCount=3;
-        for (int i=0;i<taskCount;i++){
+        int taskCount=0;
+        
+        while (true) {
+            if (form.getFirst("description"+"-"+String.valueOf(taskCount)) == null) {
+                break;
+            }
             Task task = new Task();
-            task.setDescription(form.getFirst("description"+"-"+String.valueOf(i)));
-            task.setPriority(Integer.parseInt(form.getFirst("priority"+"-"+String.valueOf(i))));
-            task.setDueDate(Date.valueOf(form.getFirst("dueDate"+"-"+String.valueOf(i))));
+            task.setDescription(form.getFirst("description"+"-"+String.valueOf(taskCount)));
+            task.setPriority(Integer.parseInt(form.getFirst("priority"+"-"+String.valueOf(taskCount))));
+            task.setDueDate(Date.valueOf(form.getFirst("dueDate"+"-"+String.valueOf(taskCount))));
             taskList.add(task);
+            taskCount ++ ;
         }
 
-        ModelAndView view = new ModelAndView();
+        if (taskList.size() < 1) {
+            view.setViewName("error");
+            view.setStatus(HttpStatusCode.valueOf(500));
+            return view;
+        }
+
         try {
             todoSvc.upsertTask(taskList, username);
             model.addAttribute("username", username);
