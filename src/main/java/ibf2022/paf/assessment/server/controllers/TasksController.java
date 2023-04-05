@@ -40,7 +40,7 @@ public class TasksController {
         String username = form.getFirst("username");
         List<Task> taskList = new LinkedList<>();
         int taskCount=0;
-        
+
         while (true) {
             if (form.getFirst("description"+"-"+String.valueOf(taskCount)) == null) {
                 break;
@@ -51,12 +51,6 @@ public class TasksController {
             task.setDueDate(Date.valueOf(form.getFirst("dueDate"+"-"+String.valueOf(taskCount))));
             taskList.add(task);
             taskCount ++ ;
-        }
-
-        if (taskList.size() < 1) {
-            view.setViewName("error");
-            view.setStatus(HttpStatusCode.valueOf(500));
-            return view;
         }
 
         try {

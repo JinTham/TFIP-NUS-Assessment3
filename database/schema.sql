@@ -1,6 +1,6 @@
-create database bgg;
+-- create database bgg;
 
-use bgg;
+use railway;
 
 create table user (
 	user_id 	varchar(8) not null,
